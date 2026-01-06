@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "preflights": {
+      "command": "preflights-mcp",
+      "args": [],
+      "env": {}
+    }
+  }
+}

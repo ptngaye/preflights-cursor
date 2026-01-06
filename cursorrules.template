@@ -1,0 +1,94 @@
+# Preflights Integration Rules
+
+This project uses Preflights for architecture decision automation.
+You MUST follow these rules when implementing features or making changes.
+
+## Core Principle
+
+**Do not invent architectural decisions.** Either:
+1. Implement strictly from `docs/CURRENT_TASK.md`, or
+2. Trigger clarification via the `require_clarification` MCP tool
+
+## Rules
+
+### Rule 1: No Task = No Code Changes
+
+If `docs/CURRENT_TASK.md` does not exist or is empty:
+- **DO NOT** modify any code files
+- **DO** call the `require_clarification` MCP tool with the user's intention
+- **DO** answer clarifying questions until the task is created
+
+### Rule 2: Implement Only What's Specified
+
+When `docs/CURRENT_TASK.md` exists:
+- **DO** implement only what is described in the task
+- **DO** respect the `Allowlist` section (only modify listed paths)
+- **DO NOT** modify files in the `Forbidden` section
+- **DO** satisfy all `Acceptance Criteria`
+
+### Rule 3: Architecture Decisions Require Clarification
+
+If the user asks for something that involves:
+- New technology choices (frameworks, libraries, databases)
+- Authentication/authorization strategy
+- API design patterns
+- Data model changes
+- Infrastructure decisions
+
+Then:
+- **DO** call `require_clarification` even if a task already exists
+- This ensures an ADR (Architecture Decision Record) is created
+
+### Rule 4: Unclear Scope = Ask for Clarification
+
+If you're unsure about:
+- Which files to modify
+- Technical constraints
+- Acceptance criteria
+
+Then:
+- **DO** call `require_clarification` to get explicit guidance
+- **DO NOT** make assumptions
+
+## Generated Artifacts
+
+These files are managed by Preflights:
+
+| File | Purpose | Action |
+|------|---------|--------|
+| `docs/CURRENT_TASK.md` | Current task specification | Read before implementing |
+| `docs/AGENT_PROMPT.md` | Implementation instructions | Use as your guide |
+| `docs/ARCHITECTURE_STATE.md` | Architecture snapshot | Reference for context |
+| `docs/adr/*.md` | Decision records | Read for rationale |
+
+## MCP Tools
+
+### require_clarification
+
+Call this to start or continue a clarification session.
+
+```json
+{
+  "user_intention": "Add OAuth authentication",
+  "session_id": "optional-for-continuation",
+  "answers": {"question_id": "answer"}
+}
+```
+
+### read_architecture
+
+Call this to understand current architecture state.
+
+```json
+{}
+```
+
+## Workflow Example
+
+1. User: "Add user authentication"
+2. You: Check if `docs/CURRENT_TASK.md` exists
+3. If not: Call `require_clarification` with intention "Add user authentication"
+4. Answer questions until status is "completed"
+5. Read `docs/AGENT_PROMPT.md` for implementation instructions
+6. Implement according to `docs/CURRENT_TASK.md`
+7. Verify against acceptance criteria
